@@ -4,8 +4,8 @@ To run
 2. "yarn start"
 
 #### Dependencies Used:
-Material UI
-React Virtualized: For optimizing the rendering of the large aircrafts table (> 1000 entries).
+1.  Material UI
+2.  React Virtualized: For optimizing the rendering of the large aircrafts table (> 1000 entries).
 
          
 
