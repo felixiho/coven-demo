@@ -1,0 +1,45 @@
+.parent-container{
+    background-color: #f1f4f6;
+    min-height: 100vh;
+}
+.parent-login{
+    /* height: 200vh; */
+    text-align: center;
+}
+
+.mt-20{
+    margin-top: 15vh !important;
+}
+
+.login-box{ 
+    padding: 30px 30px;
+    background: #fff;
+    box-shadow: 0 2px 20px rgba(0,0,0,.05);
+    border-radius: 5px;
+
+}
+
+.subText{
+    color: #acb5bb;
+    font-weight: 300;
+    font-size: 13px;
+    line-height: 16px;
+    text-transform: capitalize;
+}
+
+form{ 
+}
+.form-item{
+    width: 80%;
+}
+.form-error{
+    text-align: left;
+    color: palevioletred;
+}
+.mt-5{
+    margin-top: 13px !important;
+}
+.botton{
+    margin-top: 5vh !important;
+    margin-bottom: 4vh !important;
+}

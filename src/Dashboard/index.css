@@ -1,0 +1,13 @@
+.airport{
+    padding: 10px !important;
+}
+
+.white{
+    background-color: white;
+}
+
+.modal-sm{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
