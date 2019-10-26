@@ -1,6 +1,6 @@
 This project was bootstrapped with [Create React App]
 To run
-1. "npm insatll"
+1. "npm install"
 2. "yarn start"
 
 #### Dependencies Used:
