@@ -128,6 +128,8 @@ class Index extends Component {
         const arrival = `${this.baseURL}/flights/arrival?airport=${icao}&begin=${start}&end=${end}`;
         const departure = `${this.baseURL}/flights/departure?airport=${icao}&begin=${start}&end=${end}`;
         
+        //Note that promise all is used here because we want a single point of failure if 
+        //any of the calls fails. i.e if departure api call fails, we throw a general error.
         return Promise.all([
             fetch(arrival),
             fetch(departure)
