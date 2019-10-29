@@ -44,13 +44,13 @@ export default function CustomizedTables(props) {
         <TableBody> 
             <StyledTableRow key={props.icao24}>
               <StyledTableCell component="th" scope="row">
-                ICAO24 NAME
+                <b>ICAO24 NAME</b>
               </StyledTableCell>
               <StyledTableCell align="right">{props.icao24}</StyledTableCell> 
             </StyledTableRow>
             <StyledTableRow key={props.callsign}>
               <StyledTableCell component="th" scope="row">
-                Call Sign
+              <b>Call Sign</b>
               </StyledTableCell>
               <StyledTableCell align="right">{props.callsign}</StyledTableCell> 
             </StyledTableRow>
@@ -59,19 +59,19 @@ export default function CustomizedTables(props) {
                 <>
                     <StyledTableRow key={props.estArrivalAirport}>
                         <StyledTableCell component="th" scope="row">
-                            Destination
+                        <b>Destination</b>
                         </StyledTableCell>
                         <StyledTableCell align="right">{props.estArrivalAirport}</StyledTableCell> 
                     </StyledTableRow>
                     <StyledTableRow key={props.estArrivalAirportHorizDistance}>
                         <StyledTableCell component="th" scope="row">
-                            Airport Horizontal Distance
+                        <b>Airport Horizontal Distance</b>
                         </StyledTableCell>
                         <StyledTableCell align="right">{props.estArrivalAirportHorizDistance}</StyledTableCell> 
                     </StyledTableRow>
                     <StyledTableRow key={props.estArrivalAirportVertDistance}>
                         <StyledTableCell component="th" scope="row">
-                            Airport Vertical Distance
+                        <b>Airport Vertical Distance</b>
                         </StyledTableCell>
                         <StyledTableCell align="right">{props.estArrivalAirportVertDistance}</StyledTableCell> 
                     </StyledTableRow>
@@ -82,19 +82,19 @@ export default function CustomizedTables(props) {
                 <>
                 <StyledTableRow key={props.estDepartureAirport}>
                     <StyledTableCell component="th" scope="row">
-                        Destination
+                    <b>Destination</b> 
                     </StyledTableCell>
                     <StyledTableCell align="right">{props.estDepartureAirport}</StyledTableCell> 
                 </StyledTableRow>
                 <StyledTableRow key={props.estDepartureAirportHorizDistance}>
                     <StyledTableCell component="th" scope="row">
-                        Airport Horizontal Distance
+                    <b>Airport Horizontal Distance</b>
                     </StyledTableCell>
                     <StyledTableCell align="right">{props.estDepartureAirportHorizDistance}</StyledTableCell> 
                 </StyledTableRow>
                 <StyledTableRow key={props.estDepartureAirportVertDistance}>
                     <StyledTableCell component="th" scope="row">
-                        Airport Vertical Distance
+                    <b>Airport Vertical Distance</b>
                     </StyledTableCell>
                     <StyledTableCell align="right">{props.estDepartureAirportVertDistance}</StyledTableCell> 
                 </StyledTableRow>
@@ -103,13 +103,13 @@ export default function CustomizedTables(props) {
            
             <StyledTableRow key={props.firstSeen}>
               <StyledTableCell component="th" scope="row">
-                First Seen
+                <b>First Seen</b>
               </StyledTableCell>
               <StyledTableCell align="right">{props.firstSeen}</StyledTableCell> 
             </StyledTableRow>
             <StyledTableRow key={props.lastSeen}>
               <StyledTableCell component="th" scope="row">
-                Last Seen
+                <b>Last Seen</b>
               </StyledTableCell>
               <StyledTableCell align="right">{props.lastSeen}</StyledTableCell> 
             </StyledTableRow> 

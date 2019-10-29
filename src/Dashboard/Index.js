@@ -288,12 +288,7 @@ class Index extends Component {
                                                 width: 200,
                                                 label: 'Last Seen',
                                                 dataKey: 'lastSeen',
-                                            },
-                                            {
-                                                width: 200,
-                                                label: 'Call Sign',
-                                                dataKey: 'callsign',
-                                            },
+                                            }
                                             ]}
                                         />
                                     </Paper>
@@ -329,12 +324,7 @@ class Index extends Component {
                                                 width: 200,
                                                 label: 'Last Seen',
                                                 dataKey: 'lastSeen',
-                                            },
-                                            {
-                                                width: 200,
-                                                label: 'Call Sign',
-                                                dataKey: 'callsign',
-                                            },
+                                            }, 
                                             ]}
                                         />
                                     </Paper> 
