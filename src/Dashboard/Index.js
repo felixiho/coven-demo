@@ -16,10 +16,16 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from '@material-ui/core/Box';
 import Paper from '@material-ui/core/Paper';
-
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Virtualized from './Virtualized';
+import InfoModal from './Modal';
+import FlightInfo from './FlightInfo';
 import ReactPlaceholder from 'react-placeholder';
 import QueueAnim from 'rc-queue-anim';
+import Moment from 'react-moment';
+import moment from 'moment'
+
+import Slide from '@material-ui/core/Slide';
 
 import './index.css';
 
@@ -28,54 +34,71 @@ const airports = [
     {
         id:"1",
         city:"Atlanta",
-        icao:"KATL"
+        icao:"KATL" ,
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/atlanta.jpg"
     },
     {
         id:"2",
         city:"Toronto",
-        icao:"CYYZ" 
+        icao:"CYYZ" ,
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/toronto.jpg" 
     },
     {
         id:"3",
         city:"Dubai",
-        icao:"OMDB" 
+        icao:"OMDB" ,
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/dubai.jpg"
     },
     {
         id:"4",
         city:"Los Angeles",
-        icao:"KLAX" 
+        icao:"KLAX" ,
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/losangeles.jpg" 
     },
     {
         id:"5",
         city:"Tokyo",
-        icao:"RJTT" 
+        icao:"RJTT" ,
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/tokyo.jpg"
     },
     {
         id:"6",
         city:"Chicago",
-        icao:"KORD" 
+        icao:"KORD",
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/chicago.jpg"
     },
     {
         id:"7",
         city:"London",
-        icao:"EGLL" 
+        icao:"EGLL",
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/london.jpg"
     },
     {
         id:"8",
         city:"Hong Kong",
-        icao:"VHHH" 
+        icao:"VHHH",
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/hongkong.jpg"
     },
     {
         id:"9",
         city:"New York",
-        icao:"KJFK" 
+        icao:"KJFK",
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/newyork.jpg"
     },
     {
         id:"10",
         city:"Paris",
-        icao:"LFPG" 
+        icao:"LFPG",
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/paris.jpg"
     }
 ]
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
+const today = new Date(); 
+const days = 86400000; //number of milliseconds in a day
+const fiveDaysAgo = new Date(today - 7*days);
 class Index extends Component {
     constructor(props) {
         super(props);
@@ -88,17 +111,21 @@ class Index extends Component {
             departures: {},
             city:"",
             value: 0,
+            openChild: false,
+            childData: {}
         }
+        this._table = React.createRef();
         this.handleModal = this.handleModal.bind(this);
         this.handleTabChange = this.handleTabChange.bind(this);
-    
+        this.showTableDetails = this.showTableDetails.bind(this);
+        this.handleChildClose = this.handleChildClose.bind(this);
     }
 
   
     componentDidMount() {
         setTimeout(()=>{
             this.setState({
-                ready: true
+                ready: true 
             })
         }, 2000)
     } 
@@ -119,10 +146,7 @@ class Index extends Component {
 
      fetchAirportDetails(icao){  
         this.setState({airportReady :false})
-        //Current date in UNIX
-        const today = new Date(); 
-        const days = 86400000; //number of milliseconds in a day
-        const fiveDaysAgo = new Date(today - 6*days);
+        //Current date in UNIX 
         const start = Math.round(fiveDaysAgo.getTime() / 1000);
         const end = Math.round(today.getTime() / 1000);
         const arrival = `${this.baseURL}/flights/arrival?airport=${icao}&begin=${start}&end=${end}`;
@@ -139,14 +163,16 @@ class Index extends Component {
             let formatedArrivals = [];
             let formatedDepartures = [];
             arrivals.map((arrival) => {
-                arrival.firstSeen = JSON.stringify(this.formatDate(arrival.firstSeen)); 
-                arrival.lastSeen = JSON.stringify(this.formatDate(arrival.lastSeen)); 
+                arrival.firstSeen = moment.unix(arrival.firstSeen).format('LLLL'); 
+                arrival.lastSeen = moment.unix(arrival.lastSeen).format('LLLL'); 
+                arrival.icao24 = arrival.icao24.toUpperCase()
                 formatedArrivals.push(arrival)
             });
-            departures.map((departure) => {
-                departure.firstSeen = JSON.stringify(this.formatDate(departure.firstSeen));
-                departure.lastSeen = JSON.stringify(this.formatDate(departure.lastSeen)); 
-                formatedDepartures.push(departure)
+            departures.map((departure) => { 
+                departure.firstSeen = moment.unix(departure.firstSeen).format('LLLL') ;
+                departure.lastSeen = moment.unix(departure.lastSeen).format('LLLL');
+                departure.icao24 = departure.icao24.toUpperCase()
+                formatedDepartures.push(departure) 
             })
             this.setState({
                 arrivals: formatedArrivals,
@@ -164,136 +190,170 @@ class Index extends Component {
         return date;
     }
 
-    render() {
+    showTableDetails({ event, index, rowData }){
+        this.setState({
+            openChild: true,
+            childData: rowData
+        });
+        console.log(rowData)
+    };
+
+    handleChildClose(){
+        this.setState({
+            openChild:false,
+            childData: {}
+        })
+    }
+
+
+
+    render() {  
         return (  
             <>
-            <h1 className="parent-login">Cities</h1>
-            <ReactPlaceholder  type='media' showLoadingAnimation  ready={this.state.ready} rows={24}  > 
-                <QueueAnim
-                    type={['right', 'left']}
-                    ease={['easeOutQuart', 'easeInOutQuart']} 
-                     duration={2000}
-                    component={Grid}
-                    componentProps={{
-                        container : true,
-                        direction : "row",
-                        justify : "center",
-                        alignItems : "center",
-                        className : "parent-login"
-                    }}
-                > {
+                <h1 className="parent-login">Cities</h1>
+                <ReactPlaceholder  type='media' showLoadingAnimation  ready={this.state.ready} rows={24}  > 
+                    <QueueAnim
+                        type={['right', 'left']}
+                        ease={['easeOutQuart', 'easeInOutQuart']} 
+                        duration={2000}
+                        component={Grid}
+                        componentProps={{
+                            container : true,
+                            direction : "row",
+                            justify : "center",
+                            alignItems : "center",
+                            className : "parent-login"
+                        }}
+                    > {
 
-                    airports.map(airport => (
-                        <Grid className="airport" key={airport.id} item lg={4} md={5} xs={11}>
-                            <City  
-                                key={airport.id}
-                                handleModal={this.handleModal}
-                                icao={airport.icao}
-                                name={airport.city}
-                            />
-                        </Grid>
-                    )) } 
-                </QueueAnim>
-                        
-                <Dialog
-                    fullWidth={true}
-                    maxWidth="md"
-                    open={this.state.open}
-                    onClose={this.handleModal}  
-                    aria-labelledby="max-width-dialog-title"
-                    >
-                    <DialogTitle id="max-width-dialog-title">{this.state.city}</DialogTitle>
-                    <DialogContent>
-                        <AppBar position="static">
-                            <Tabs value={this.state.value} onChange={this.handleTabChange} >
-                                <Tab label="Arrivals"   />
-                                <Tab label="Departures"   /> 
-                            </Tabs>
-                        </AppBar>
-                        <TabPanel value={this.state.value} index={0}>
-                            <h2>Arrivals</h2> 
-                            <ReactPlaceholder  type='text' showLoadingAnimation  ready={this.state.airportReady} rows={12}  >
-                                <Paper style={{ height: 400, width: '100%' }}>
-                                    <Virtualized
-                                        rowCount={this.state.arrivals.length}
-                                        rowGetter={({ index }) => this.state.arrivals[index]}
-                                        columns={[
-                                        {
-                                            width: 200,
-                                            label: 'ICAO',
-                                            dataKey: 'icao24',
-                                        },
-                                        {
-                                            width: 200,
-                                            label: 'Arriving From',
-                                            dataKey: 'estDepartureAirport',
-                                        },
-                                        {
-                                            width: 200,
-                                            label: 'First Seen',
-                                            dataKey: 'firstSeen',
-                                        },
-                                        {
-                                            width: 200,
-                                            label: 'Last Seen',
-                                            dataKey: 'lastSeen',
-                                        },
-                                        {
-                                            width: 200,
-                                            label: 'Call Sign',
-                                            dataKey: 'callsign',
-                                        },
-                                        ]}
-                                    />
-                                </Paper>
-                            </ReactPlaceholder> 
-                        </TabPanel>
-                        <TabPanel value={this.state.value} index={1}>
-                            <h2>Departures</h2> 
-                            <ReactPlaceholder  type='text' showLoadingAnimation  ready={this.state.airportReady} rows={12}  >
-                                <Paper style={{ height: 400, width: '100%' }}>
-                                    <Virtualized
-                                        rowCount={this.state.departures.length}
-                                        rowGetter={({ index }) => this.state.departures[index]}
-                                        columns={[
-                                        {
-                                            width: 200,
-                                            label: 'ICAO',
-                                            dataKey: 'icao24',
-                                        },
-                                        {
-                                            width: 200,
-                                            label: 'Destination',
-                                            dataKey: 'estArrivalAirport',
-                                        },
-                                        {
-                                            width: 200,
-                                            label: 'First Seen',
-                                            dataKey: 'firstSeen',
-                                        },
-                                        {
-                                            width: 200,
-                                            label: 'Last Seen',
-                                            dataKey: 'lastSeen',
-                                        },
-                                        {
-                                            width: 200,
-                                            label: 'Call Sign',
-                                            dataKey: 'callsign',
-                                        },
-                                        ]}
-                                    />
-                                </Paper> 
-                            </ReactPlaceholder>
-                        </TabPanel> 
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={this.handleModal} color="primary">
-                            Close
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            </ReactPlaceholder>
+                        airports.map(airport => (
+                            <Grid className="airport" key={airport.id} item lg={4} md={5} xs={11}>
+                                <City  
+                                    key={airport.id}
+                                    handleModal={this.handleModal}
+                                    icao={airport.icao}
+                                    name={airport.city}
+                                    link={airport.link}
+                                />
+                            </Grid>
+                        )) } 
+                    </QueueAnim>
+                            
+                    <Dialog
+                        fullWidth={true}
+                        maxWidth="md"
+                        open={this.state.open}
+                        onClose={this.handleModal}  
+                        aria-labelledby="max-width-dialog-title"
+                        >
+                        <DialogTitle id="max-width-dialog-title">
+                            {this.state.city}
+                            <span><p className="p-span">Showing flights from   <b className="bolder"><Moment format="LLLL" date={fiveDaysAgo} /></b>  to <b className="bolder"><Moment format="LLLL" date={today} /> </b> 
+                            </p></span>
+                        </DialogTitle>
+                        <DialogContent>
+                            <AppBar position="static">
+                                <Tabs value={this.state.value} onChange={this.handleTabChange} >
+                                    <Tab label="Arrivals"   />
+                                    <Tab label="Departures"   /> 
+                                </Tabs>
+                            </AppBar>
+                            <TabPanel value={this.state.value} index={0}>
+                                <h2>Flight Arrivals</h2> 
+                                <ReactPlaceholder  type='text' showLoadingAnimation  ready={this.state.airportReady} rows={12}  >
+                                    <Paper style={{ height: 400, width: '100%' }}>
+                                        <Virtualized
+                                            rowCount={this.state.arrivals.length}
+                                            rowGetter={({ index }) => this.state.arrivals[index]}
+                                            ref={this._table}
+                                            headerHeight={40}
+                                            onRowClick={ ({ event, index, rowData }) => this.showTableDetails({ event, index, rowData }   )}
+                                            columns={[
+                                            {
+                                                width: 200,
+                                                label: 'ICAO',
+                                                dataKey: 'icao24',
+                                            },
+                                            {
+                                                width: 200,
+                                                label: 'Arriving From',
+                                                dataKey: 'estDepartureAirport',
+                                            },
+                                            {
+                                                width: 200,
+                                                label: 'First Seen',
+                                                dataKey: 'firstSeen',
+                                            },
+                                            {
+                                                width: 200,
+                                                label: 'Last Seen',
+                                                dataKey: 'lastSeen',
+                                            },
+                                            {
+                                                width: 200,
+                                                label: 'Call Sign',
+                                                dataKey: 'callsign',
+                                            },
+                                            ]}
+                                        />
+                                    </Paper>
+                                </ReactPlaceholder> 
+                            </TabPanel>
+                            <TabPanel value={this.state.value} index={1}>
+                                <h2>Flight Departures</h2> 
+                                <ReactPlaceholder  type='text' showLoadingAnimation  ready={this.state.airportReady} rows={12}  >
+                                    <Paper style={{ height: 400, width: '100%' }}>
+                                        <Virtualized
+                                            rowCount={this.state.departures.length}
+                                            rowGetter={({ index }) => this.state.departures[index]}
+                                            ref={this._table}
+                                            headerHeight={40}
+                                            onRowClick={ ({ event, index, rowData }) => this.showTableDetails({ event, index, rowData }   )}
+                                            columns={[
+                                            {
+                                                width: 200,
+                                                label: 'ICAO',
+                                                dataKey: 'icao24',
+                                            },
+                                            {
+                                                width: 200,
+                                                label: 'Destination',
+                                                dataKey: 'estArrivalAirport',
+                                            },
+                                            {
+                                                width: 200,
+                                                label: 'First Seen',
+                                                dataKey: 'firstSeen',
+                                            },
+                                            {
+                                                width: 200,
+                                                label: 'Last Seen',
+                                                dataKey: 'lastSeen',
+                                            },
+                                            {
+                                                width: 200,
+                                                label: 'Call Sign',
+                                                dataKey: 'callsign',
+                                            },
+                                            ]}
+                                        />
+                                    </Paper> 
+                                </ReactPlaceholder>
+                            </TabPanel> 
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={this.handleModal} color="primary">
+                                Close
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                </ReactPlaceholder> 
+                <InfoModal
+                    openChild={this.state.openChild}
+                    handleChildClose={this.handleChildClose}
+                    value={this.state.value}
+                    {...this.state.childData}
+                 />
             </>
         );
     }
@@ -304,8 +364,10 @@ const City = props => (
         <CardActionArea >
             <CardMedia
                 className="a"
-                image="https://images.unsplash.com/photo-1538428494232-9c0d8a3ab403?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2850&q=80"
-                title="Contemplative Reptile"
+                image={props.link}
+                title="Airport"
+                style = {{ height: 250}}
+
             />
             <CardContent>
                 <Typography gutterBottom variant="h5" component="h2">
@@ -339,9 +401,5 @@ const  TabPanel = (props)=> {
         <Box p={3}>{children}</Box>
       </Typography>
     );
-  }
-  
-
-
-
+  } 
 export default Index;
