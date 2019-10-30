@@ -89,7 +89,7 @@ const Login =
                                     </FormControl>
 
                                     <div style={{textAlign: 'center'}}>
-                                        <Link to="/">
+                                        <Link to="/reset-password">
                                             <span > Forgot Password</span>
                                         </Link>
                                     </div>

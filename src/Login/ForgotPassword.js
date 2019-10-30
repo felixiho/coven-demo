@@ -4,6 +4,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel'; 
+import { Link } from "@reach/router";
 import './index.css'
 
 const ForgotPassword =
@@ -44,6 +45,11 @@ const ForgotPassword =
                                         >
                                         Send</Button>
                                     </FormControl>
+                                    <div style={{textAlign: 'center'}}>
+                                        <Link to="/">
+                                            <span  > Login</span>
+                                        </Link>
+                                    </div>
                                 </form>
                             </div>
                          </Grid>

@@ -43,3 +43,7 @@ form{
     margin-top: 5vh !important;
     margin-bottom: 4vh !important;
 }
+
+a{
+    text-decoration: none;
+}
