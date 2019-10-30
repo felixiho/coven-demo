@@ -15,11 +15,9 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent'; 
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Box from '@material-ui/core/Box';
-import Paper from '@material-ui/core/Paper';
-import DialogContentText from '@material-ui/core/DialogContentText';
+import Paper from '@material-ui/core/Paper'; 
 import Virtualized from './Virtualized';
-import InfoModal from './Modal';
-import FlightInfo from './FlightInfo';
+import InfoModal from './Modal'; 
 import ReactPlaceholder from 'react-placeholder';
 import QueueAnim from 'rc-queue-anim';
 import Moment from 'react-moment';
@@ -35,61 +33,71 @@ const airports = [
         id:"1",
         city:"Atlanta",
         icao:"KATL" ,
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/atlanta.jpg"
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/atlanta.jpg",
+        summary: "Hartsfield–Jackson Atlanta International Airport (IATA: ATL, ICAO: KATL, FAA LID: ATL), also known as Atlanta Airport, Hartsfield, or Hartsfield–Jackson, is the primary international airport serving Atlanta, Georgia.",
     },
     {
         id:"2",
         city:"Toronto",
         icao:"CYYZ" ,
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/toronto.jpg" 
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/toronto.jpg",
+        summary:"Toronto Pearson International Airport and simply known as Toronto Pearson, Pearson Airport or Pearson, is the primary international airport serving Toronto,"
     },
     {
         id:"3",
         city:"Dubai",
         icao:"OMDB" ,
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/dubai.jpg"
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/dubai.jpg",
+        summary:"Dubai International Airport is the primary international airport serving Dubai, United Arab Emirates and is the world's busiest airport by international passenger traffic."
     },
     {
         id:"4",
         city:"Los Angeles",
         icao:"KLAX" ,
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/losangeles.jpg" 
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/losangeles.jpg" ,
+        summary:"Los Angeles International Airport, commonly referred to as LAX, is the primary international airport serving Los Angeles, California, United States, and its surrounding metropolitan area."
     },
     {
         id:"5",
         city:"Tokyo",
         icao:"RJTT" ,
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/tokyo.jpg"
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/tokyo.jpg",
+        summary:"Tokyo International Airport, commonly known as Haneda Airport, Tokyo Haneda Airport, and Haneda International Airport, is one of the two primary airports that serve the Greater Tokyo Area, and is the ."
     },
     {
         id:"6",
         city:"Chicago",
         icao:"KORD",
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/chicago.jpg"
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/chicago.jpg",
+        summary:"O'Hare Airport, Chicago O'Hare, or simply O'Hare, is an international airport located on the Northwest Side of Chicago, Illinois, 14 miles (23 km) northwest of the Loop business district; operated by the Chicago Department of"
     },
     {
         id:"7",
         city:"London",
         icao:"EGLL",
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/london.jpg"
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/london.jpg",
+        summary:"London has six major airports: London City, London Gatwick, London Heathrow, London Luton, London Stansted and London Southend. Find all the information you need about London's airport facilities, locations and connections, including a London airports map."
     },
     {
         id:"8",
         city:"Hong Kong",
         icao:"VHHH",
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/hongkong.jpg"
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/hongkong.jpg",
+        summary:"Hong Kong International Airport is Hong Kong's main airport, built on reclaimed land on the island of Chek Lap Kok. The airport is also known as Chek Lap Kok Airport to distinguish it from its predecessor, the former Kai Tak Airport."
     },
     {
         id:"9",
         city:"New York",
         icao:"KJFK",
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/newyork.jpg"
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/newyork.jpg",
+        summary:"John F. Kennedy International Airport is an international airport in Queens, New York. It is the primary international airport serving New York City."
     },
     {
         id:"10",
         city:"Paris",
         icao:"LFPG",
-        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/paris.jpg"
+        link:"https://res.cloudinary.com/felixiho/image/upload/c_scale,w_550/demoi/paris.jpg",
+        summary:"Orly International Airport also handles some major international flights, including for Air France. ... Paris-Charles de Gaulle International Airport (CDG) ... Many of the world's major airlines fly into CDG, which serves as the main hub for French national carrier Air France."
     }
 ]
 
@@ -234,6 +242,7 @@ class Index extends Component {
                                     icao={airport.icao}
                                     name={airport.city}
                                     link={airport.link}
+                                    summary={airport.summary}
                                 />
                             </Grid>
                         )) } 
@@ -271,12 +280,12 @@ class Index extends Component {
                                             columns={[
                                             {
                                                 width: 200,
-                                                label: 'ICAO',
+                                                label: 'Aircraft ICAO24',
                                                 dataKey: 'icao24',
                                             },
                                             {
                                                 width: 200,
-                                                label: 'Arriving From',
+                                                label: 'Origin Airport',
                                                 dataKey: 'estDepartureAirport',
                                             },
                                             {
@@ -307,12 +316,12 @@ class Index extends Component {
                                             columns={[
                                             {
                                                 width: 200,
-                                                label: 'ICAO',
+                                                label: 'Aircraft ICAO24',
                                                 dataKey: 'icao24',
                                             },
                                             {
                                                 width: 200,
-                                                label: 'Destination',
+                                                label: 'Destination Airport',
                                                 dataKey: 'estArrivalAirport',
                                             },
                                             {
@@ -355,8 +364,8 @@ const City = props => (
             <CardMedia
                 className="a"
                 image={props.link}
-                title="Airport"
-                style = {{ height: 250}}
+                title={props.name}
+                style = {{ height: 200}}
 
             />
             <CardContent>
@@ -364,8 +373,7 @@ const City = props => (
                 {props.name}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" component="p">
-                    Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging
-                    across all continents except Antarctica
+                    {props.summary}
                 </Typography>
             </CardContent>
         </CardActionArea>

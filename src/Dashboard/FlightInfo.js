@@ -44,7 +44,7 @@ export default function CustomizedTables(props) {
         <TableBody> 
             <StyledTableRow key={props.icao24}>
               <StyledTableCell component="th" scope="row">
-                <b>ICAO24 NAME</b>
+                <b>AIRCRAFT ICAO24 NAME</b>
               </StyledTableCell>
               <StyledTableCell align="right">{props.icao24}</StyledTableCell> 
             </StyledTableRow>
@@ -59,7 +59,7 @@ export default function CustomizedTables(props) {
                 <>
                     <StyledTableRow key={props.estArrivalAirport}>
                         <StyledTableCell component="th" scope="row">
-                        <b>Destination</b>
+                        <b>Origin Airport</b>
                         </StyledTableCell>
                         <StyledTableCell align="right">{props.estArrivalAirport}</StyledTableCell> 
                     </StyledTableRow>
@@ -82,7 +82,7 @@ export default function CustomizedTables(props) {
                 <>
                 <StyledTableRow key={props.estDepartureAirport}>
                     <StyledTableCell component="th" scope="row">
-                    <b>Destination</b> 
+                    <b>Destination Airport</b> 
                     </StyledTableCell>
                     <StyledTableCell align="right">{props.estDepartureAirport}</StyledTableCell> 
                 </StyledTableRow>

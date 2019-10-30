@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import {  navigate } from "@reach/router";
+import {  navigate, Link } from "@reach/router";
 import './index.css'
 
 const Login =
@@ -16,8 +16,7 @@ const Login =
         const [formDisable, setformDisable] = useState(false);
 
 
-        const handleSubmit = () =>{ 
-        
+        const handleSubmit = () =>{  
             setformDisable(true);
             setErrors([]);
             let formErrors = []; 
@@ -58,7 +57,7 @@ const Login =
                                 <p className="subText">
                                     Live airspace information for research.
                                 </p>
-                                <form noValidate>  
+                                <form noValidate >  
                                      <FormControl className="form-item">
                                         <InputLabel htmlFor="username">Username</InputLabel>
                                         <Input id="username" type="text" onChange={(e) => setUsername(e.target.value) } />
@@ -83,10 +82,17 @@ const Login =
                                             color="primary"
                                             className="botton" 
                                             disabled={formDisable} 
-                                            onClick={handleSubmit}
+                                            type="submit"
+                                            onClick={ handleSubmit}
                                         >
                                         {  formDisable ? <CircularProgress /> : "Login"}</Button>
                                     </FormControl>
+
+                                    <div style={{textAlign: 'center'}}>
+                                        <Link to="/">
+                                            <span > Forgot Password</span>
+                                        </Link>
+                                    </div>
                                 </form>
                             </div>
                          </Grid>
