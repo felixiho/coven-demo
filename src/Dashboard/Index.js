@@ -168,23 +168,19 @@ class Index extends Component {
         ]).then( async ([arrivalReseponse,departureResponse]) =>  { 
             let arrivals = await arrivalReseponse.json();
             let departures = await departureResponse.json();
-            let formatedArrivals = [];
-            let formatedDepartures = [];
-            arrivals.map((arrival) => {
+            arrivals.forEach((arrival) => {
                 arrival.firstSeen = moment.unix(arrival.firstSeen).format('LLLL'); 
                 arrival.lastSeen = moment.unix(arrival.lastSeen).format('LLLL'); 
-                arrival.icao24 = arrival.icao24.toUpperCase()
-                formatedArrivals.push(arrival)
+                arrival.icao24 = arrival.icao24.toUpperCase() 
             });
-            departures.map((departure) => { 
+            departures.forEach((departure) => { 
                 departure.firstSeen = moment.unix(departure.firstSeen).format('LLLL') ;
                 departure.lastSeen = moment.unix(departure.lastSeen).format('LLLL');
-                departure.icao24 = departure.icao24.toUpperCase()
-                formatedDepartures.push(departure) 
+                departure.icao24 = departure.icao24.toUpperCase() 
             })
             this.setState({
-                arrivals: formatedArrivals,
-                departures: formatedDepartures,
+                arrivals: arrivals,
+                departures: departures,
                 airportReady: true
             });  
         })
